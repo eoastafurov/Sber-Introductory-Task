@@ -12,6 +12,10 @@ import random
 class Checkers:
     @staticmethod
     def check_fitted(func):
+        """
+        Checks if method `fit(...)` was called and
+        necessary tables if self scope was generated
+        """
         @functools.wraps(func)
         def wrapper_check_fitted(*args, **kwargs):
             if not isinstance(args[0], CollaborativeLatentFactorSVDModel):
@@ -23,20 +27,35 @@ class Checkers:
 
 
 class CollaborativeLatentFactorSVDModel:
+    """
+    This method is model-based collaborative filtering.
+    Latent factor model compresses user-item matrix into a
+    low-dimensional representation in terms of latent factors.
+    """
     def __init__(self, number_of_factors: int = 15):
+        """
+        :param number_of_factors: Number of singular
+            values and singular vectors to compute
+        """
         self.number_of_factors = number_of_factors
         self.cf_preds_df = None
         self.users_ids = None
 
-    def hyperparams(self) -> Dict:
+    def _hyperparams(self) -> Dict:
         return {'number_of_factors': self.number_of_factors}
 
     @Checkers.check_fitted
     def save(self, path: str):
+        """
+        Save model fields to file in
+        pickle format
+        :param path: path to file,
+            ends with .pkl
+        """
         model_dict = {
             'cf_preds_df': self.cf_preds_df,
             'users_ids': self.users_ids,
-            'hyperparams': self.hyperparams()
+            'hyperparams': self._hyperparams()
         }
         with open(path, 'w+b') as f:
             pickle.dump(model_dict, f)
