@@ -10,7 +10,7 @@ CAN_BE_DROPPED = {
     'item_asset': ['asset_upload_number'],
     'item_price': ['price_upload_number'],
     'user_age': ['age_upload_number'],
-    'interactions': ['has_interaction'],
+    # 'interactions': ['has_interaction'],
     'item_subclass': ['item_category_belonging'],
     'user_region': ['user_region_belonging']
 }
