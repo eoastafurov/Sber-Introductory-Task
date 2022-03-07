@@ -8,6 +8,10 @@ import pandas as pd
 class Checkers:
     @staticmethod
     def check_fitted(func):
+        """
+        Checks if method `fit(...)` was called and
+        necessary tables if self scope was generated
+        """
         @functools.wraps(func)
         def wrapper_check_fitted(*args, **kwargs):
             if not isinstance(args[0], PopularityModel):
@@ -19,12 +23,23 @@ class Checkers:
 
 
 class PopularityModel:
+    """
+    Common (and usually hard-to-beat) baseline approach.
+    This model is not actually personalized - it simply
+    recommends to a user the most popular items that
+    the user has not previously consumed
+    """
     def __init__(self, items_df: pd.DataFrame):
         self.popularity_df = None
         self.items_df = items_df
 
     @Checkers.check_fitted
     def save(self, path: str):
+        """
+        Save model fields to pickle format
+        :param path: full path, ends with .pkl
+        :return: dict with params
+        """
         model_dict = {
             'items_df': self.items_df,
             'popularity_df': self.popularity_df
@@ -35,6 +50,11 @@ class PopularityModel:
 
     @staticmethod
     def load_from_file(path: str):
+        """
+        Load model configuration and weights
+        from file.
+        Also perform one test
+        """
         if not os.path.exists(path):
             raise FileNotFoundError
 

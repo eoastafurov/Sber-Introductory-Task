@@ -4,6 +4,11 @@ from typing import Dict, Set, Optional, List, Tuple
 from tqdm import tqdm
 
 EVAL_RANDOM_SAMPLE_NON_INTERACTED_ITEMS = 10
+"""
+EVAL_RANDOM_SAMPLE_NON_INTERACTED_ITEMS
+is the const param that defines number of
+non interacted items in sample.
+"""
 
 
 class DataUtils:
@@ -89,6 +94,10 @@ class ModelEvaluator:
             self,
             person_id: int
     ) -> Dict[str, float]:
+        """
+        Get metrics for explicit user,
+        provided with id
+        """
         interacted_values_testset = self.test_data['interactions'].loc[person_id]
         if type(interacted_values_testset['item_id']) == pd.Series:
             person_interacted_items_testset = set(interacted_values_testset['item_id'])
@@ -143,6 +152,13 @@ class ModelEvaluator:
             self,
             num_values: Optional[int] = None
     ) -> Tuple[Dict[str, float], pd.DataFrame]:
+        """
+        Get global metrics for model along testset
+        :param num_values: number of test data rows.
+            P.S. Fill with None if you want to
+            test on whole testset
+        :return: Global metrics dictionary and dataframe with details
+        """
         people_metrics = []
         tests = list(self.test_data['interactions'].index.unique().values)
         if num_values is not None:

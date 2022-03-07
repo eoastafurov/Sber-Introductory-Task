@@ -14,6 +14,9 @@ CAN_BE_DROPPED = {
     'item_subclass': ['item_category_belonging'],
     'user_region': ['user_region_belonging']
 }
+"""
+Columns that can be dropped from data
+"""
 
 PRUNE_CLAUSE = {
     'interactions': {
@@ -29,6 +32,9 @@ PRUNE_CLAUSE = {
         'condition': 'val equals zero'
     }
 }
+"""
+Pruning for rows
+"""
 
 COLUMNS_PERMUTATION = {
     'interactions': {
@@ -62,6 +68,9 @@ COLUMNS_PERMUTATION = {
         'data': 'user_region_belonging'
     }
 }
+"""
+Params for columns rename
+"""
 
 DROP_TABLES_AFTER_MERGE = [
     'item_asset',
@@ -70,11 +79,17 @@ DROP_TABLES_AFTER_MERGE = [
     'user_age',
     'user_region'
 ]
+"""
+Unnecessary tables after merge 
+"""
 
 
 class Checkers:
     @staticmethod
     def check_validity(func):
+        """
+        Checks if `setup()` was called
+        """
         @functools.wraps(func)
         def wrapper_check_validity(*args, **kwargs):
             if not isinstance(args[0], DataManager):
@@ -95,6 +110,10 @@ class DataManager:
         self.test_interactions = None
 
     def setup(self, verbose: bool = True):
+        """
+        Load tables, prune, merge, drop and other
+        necessary data preparations
+        """
         self.data = self._load()
         self.data, num_prunes = self._prune()
         self.data = self._drop_unnecessary_cols()
@@ -189,6 +208,3 @@ class DataManager:
             self.data[key] = self.data[key].dropna()
 
         return self.data, num_nan
-
-
-
